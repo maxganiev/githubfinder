@@ -37,13 +37,13 @@ export const GithubState = (props)=>{
   };
 
 //setting local var to hide API token:
-// let githubToken;
-// if (process.env.NODE_ENV !== 'production') {
-//   githubToken = process.env.REACT_APP_GITHUB_TOKEN;
+let githubToken;
+if (process.env.NODE_ENV !== 'production') {
+  githubToken = process.env.REACT_APP_GITHUB_TOKEN;
   
-// } else {
-//   githubToken = process.env.GITHUB_TOKEN;
-// }
+} else {
+  githubToken = process.env.GITHUB_TOKEN;
+}
 
 
   //inititalize the reducer to dispatch actions to our githubReducer:
@@ -90,7 +90,7 @@ export const GithubState = (props)=>{
     const request = await fetch(`https://api.github.com/search/users?q=${query}&page=${increment}`, {
       method: 'GET',
       headers:{
-      Authorization: `Basic ${process.env.REACT_APP_GITHUB_TOKEN}`
+      Authorization: `Basic ${githubToken}`
       }
     });
 
@@ -156,7 +156,7 @@ export const GithubState = (props)=>{
       const request = await fetch(`https://api.github.com/users/${login}`, {
         method: 'GET',
         headers:{
-        Authorization: `Basic ${process.env.REACT_APP_GITHUB_TOKEN}`
+        Authorization: `Basic ${githubToken}`
         }
       });
   
@@ -172,7 +172,7 @@ export const GithubState = (props)=>{
       const request = await fetch(`https://api.github.com/users/${login}/followers?per_page=30`, {
         method: 'GET',
         headers:{
-        Authorization: `Basic ${process.env.REACT_APP_GITHUB_TOKEN}`
+        Authorization: `Basic ${githubToken}`
         }
       });
       
@@ -231,7 +231,7 @@ export const GithubState = (props)=>{
      const request_repos = await fetch(`https://api.github.com/users/${login}/repos?per_page=30`, {
       method: 'GET',
       headers:{
-      Authorization: `Basic ${process.env.REACT_APP_GITHUB_TOKEN}`
+      Authorization: `Basic ${githubToken}`
       }
     });
      
