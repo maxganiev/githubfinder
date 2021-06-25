@@ -19,6 +19,15 @@ import {
   DECREMENT
 } from '../types';
 
+//setting local var to hide API token:
+let githubToken;
+if (process.env.NODE_ENV !== 'production') {
+  githubToken = process.env.REACT_APP_GITHUB_TOKEN;
+  
+} else {
+  githubToken = process.env.GITHUB_TOKEN;
+}
+
 //setting up an initial state:
 export const GithubState = (props)=>{
   const initialState = {
@@ -35,15 +44,6 @@ export const GithubState = (props)=>{
     increment: 1,
     decrement: null
   };
-
-//setting local var to hide API token:
-let githubToken;
-if (process.env.NODE_ENV !== 'production') {
-  githubToken = process.env.REACT_APP_GITHUB_TOKEN;
-  
-} else {
-  githubToken = process.env.GITHUB_TOKEN;
-}
 
 
   //inititalize the reducer to dispatch actions to our githubReducer:
@@ -88,42 +88,38 @@ if (process.env.NODE_ENV !== 'production') {
     setSearchString(query)
 
     const request = await fetch(`https://api.github.com/search/users?q=${query}&page=${increment}`, {
-      method: 'GET',
-      headers:{
-      Authorization: `Basic ${githubToken}`
-      }
+    method: 'GET',
+    headers:{
+    Authorization: `Basic ${githubToken}`
+    }
     });
 
-   if(request.status !== 200) {
-        //these custom functions (or methods) have to be called if state is gonna be changed in this particular case (the value will be received via dispatch from the Reducer; otherwise no need to call it, and state will remain initially set)
-        setFetchErrStyle( {
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: 'red'
-        });
-        
-        setfetchErrContent('server failure...');
-        throw new Error('fetching problems has occured...');
-   } else {
-    const data = await request.json();
-    setUsers(data.items);
-    setHasUsers(data.items.length);
-
-    if(data.items.length === 0){
+    if(request.status === 200){
+      const data = await request.json();
+      setUsers(data.items);
+      setHasUsers(data.items.length);
+  
+      if(data.items.length === 0){
       setFetchErrStyle({
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'red'
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: 'red'
       });
       setfetchErrContent('no users have been found');
       setHasUsers(data.items.length); 
-    } else {
+      setIncrement(1);
+      setDecrement(0);
+      } else {
       setfetchErrContent('');
       setFetchErrStyle({display: 'none'})
+      }
+    } else{
+      request.status === 403 ?
+      document.getElementById('root').innerHTML = `
+      <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
+      document.getElementById('root').innerHTML = `Poor connection...` 
     }
-   }
    } 
 };
 
@@ -159,9 +155,16 @@ if (process.env.NODE_ENV !== 'production') {
         Authorization: `Basic ${githubToken}`
         }
       });
-  
+      
+      if(request.status === 200){
       const response = await request.json();
       setUser(response);
+      } else {
+        request.status === 403 ?
+        document.getElementById('root').innerHTML = `
+        <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
+        document.getElementById('root').innerHTML = `Poor connection...` 
+      }
     }
   };
 
@@ -182,7 +185,6 @@ if (process.env.NODE_ENV !== 'production') {
       setLoading();
       const response = await request.json();
 
-
       if(response.length === 0){
       setFollowers([]);
       setHasFollowers(response.length);
@@ -202,15 +204,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 
       } else {
-      setFetchErrStyle({
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      color: 'red'
-      });
-      setfetchErrContent('server failure...');
-      setLoading();
-      throw new Error('fetching problems has occured...');
+        request.status === 403 ?
+        document.getElementById('root').innerHTML = `
+        <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
+        document.getElementById('root').innerHTML = `Poor connection...` 
       }
 
   }
@@ -228,17 +225,17 @@ if (process.env.NODE_ENV !== 'production') {
   
     setLoading();
     ////new request to get the list of reposes
-     const request_repos = await fetch(`https://api.github.com/users/${login}/repos?per_page=30`, {
+     const request = await fetch(`https://api.github.com/users/${login}/repos?per_page=30`, {
       method: 'GET',
       headers:{
       Authorization: `Basic ${githubToken}`
       }
     });
      
-     if(request_repos.status === 200){
+     if(request.status === 200){
      setLoading();
-     const response_repos = await request_repos.json();
-     if(response_repos.length === 0){
+     const response = await request.json();
+     if(response.length === 0){
       setRepos([]);
 
       setFetchErrStyle({
@@ -252,7 +249,7 @@ if (process.env.NODE_ENV !== 'production') {
      } 
      
      else {
-     setRepos(response_repos);
+     setRepos(response);
 
      setFetchErrStyle({
        display: 'none'
@@ -263,15 +260,10 @@ if (process.env.NODE_ENV !== 'production') {
      } 
      
      else {
-      setFetchErrStyle({
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'red'
-      });
-      setfetchErrContent('server failure...');
-      setLoading();
-      throw new Error('fetching problems has occured...');
+      request.status === 403 ?
+      document.getElementById('root').innerHTML = `
+      <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
+      document.getElementById('root').innerHTML = `Poor connection...` 
      }
  }
 

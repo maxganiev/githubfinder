@@ -3,7 +3,7 @@ import {Navbar} from './Components/Layout/Navbar';
 import {Home} from './Pages/Home';
 
 
-import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import { HashRouter as Router, Route, Switch} from "react-router-dom";
 import { Contacts } from './Pages/Contacts';
 import { User } from './Components/Layout/User';
 import { Followers } from './Components/Layout/Followers';

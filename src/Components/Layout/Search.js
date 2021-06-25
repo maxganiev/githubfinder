@@ -24,7 +24,9 @@ export const Search = ()=>{
   setSearchQuery(e.target.value);
 
   //passing input value as a query param:
-  GithubContext.searchUsers(searchQuery, GithubContext.increment);
+  setTimeout(() => {
+    GithubContext.searchUsers(searchQuery, GithubContext.increment);
+  }, 300);
   break;
   }
   }
