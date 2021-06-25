@@ -20,13 +20,13 @@ import {
 } from '../types';
 
 //setting local var to hide API token:
-let githubToken;
-if (process.env.NODE_ENV !== 'production') {
-  githubToken = process.env.REACT_APP_GITHUB_TOKEN;
+let githubToken = process.env.REACT_APP_GITHUB_TOKEN;
+// if (process.env.NODE_ENV !== 'production') {
+//   githubToken = process.env.REACT_APP_GITHUB_TOKEN;
   
-} else {
-  githubToken = process.env.GITHUB_TOKEN;
-}
+// } else {
+//   githubToken = process.env.GITHUB_TOKEN;
+// }
 
 //setting up an initial state:
 export const GithubState = (props)=>{
