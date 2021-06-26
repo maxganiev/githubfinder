@@ -13,6 +13,9 @@ ReactDOM.render(
 );
 } else {
   document.getElementById('root').innerHTML = `
-  <p> No Internet conection, try to reload... </p>  `
+  <p> No Internet conection, attempting to reload... </p>  `;
+
+  //attempting to reload the page
+  setTimeout(()=>{document.location.reload()},3000)
 }
 })()

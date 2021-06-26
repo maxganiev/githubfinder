@@ -117,8 +117,11 @@ export const GithubState = (props)=>{
     } else{
       request.status === 403 ?
       document.getElementById('root').innerHTML = `
-      <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
-      document.getElementById('root').innerHTML = `Poor connection...` 
+      <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `: (()=>{
+        document.getElementById('root').innerHTML = `Poor connection, trying to reload...`;
+           //attempting to reload the page
+           setTimeout(()=>{document.location.reload()},3000)
+      })();
     }
    } 
 };
@@ -206,8 +209,11 @@ export const GithubState = (props)=>{
       } else {
         request.status === 403 ?
         document.getElementById('root').innerHTML = `
-        <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
-        document.getElementById('root').innerHTML = `Poor connection...` 
+        <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `: (()=>{
+          document.getElementById('root').innerHTML = `Poor connection, trying to reload...`;
+             //attempting to reload the page
+             setTimeout(()=>{document.location.reload()},3000)
+        })();
       }
 
   }
@@ -262,8 +268,11 @@ export const GithubState = (props)=>{
      else {
       request.status === 403 ?
       document.getElementById('root').innerHTML = `
-      <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `:
-      document.getElementById('root').innerHTML = `Poor connection...` 
+      <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `: (()=>{
+        document.getElementById('root').innerHTML = `Poor connection, trying to reload...`;
+           //attempting to reload the page
+           setTimeout(()=>{document.location.reload()},3000)
+      })();
      }
  }
 
