@@ -72,9 +72,9 @@ export const GithubState = (props)=>{
 
   //searchUsers (the name calls for itself :) ):
   const searchUsers = async(searchQuery, increment)=>{
-    const regex = '^[A-Za-zа-яА-Яё0-9_-]*$';
+    // const regex = '^[A-Za-zа-яА-Яё0-9_-]*$';
    
-    if(searchQuery.trim() !== '' && searchQuery !== null && searchQuery !== undefined && searchQuery.match(regex)){
+    if(searchQuery.trim() !== '' && searchQuery !== null && searchQuery !== undefined){
     //while the request has not yet been sent
     setLoading();
 
@@ -85,7 +85,7 @@ export const GithubState = (props)=>{
       query = searchQuery.replace(/ /g, '%20')
     }
  
-    setSearchString(query)
+    setSearchString(query);
 
     const request = await fetch(`https://api.github.com/search/users?q=${query}&page=${increment}`, {
     method: 'GET',
@@ -114,7 +114,13 @@ export const GithubState = (props)=>{
       setfetchErrContent('');
       setFetchErrStyle({display: 'none'})
       }
-    } else{
+    } 
+    else if(request.status === 422){
+      document.getElementById('root').innerHTML = `Misspelling, check the input!`;
+      //attempting to reload the page
+      setTimeout(()=>{document.location.reload()},3000)
+    }
+    else{
       request.status === 403 ?
       document.getElementById('root').innerHTML = `
       <p> You seem to have exceeded the permitted amount of requests... Try again later </p>  `: (()=>{
